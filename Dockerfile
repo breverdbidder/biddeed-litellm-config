@@ -1,10 +1,14 @@
 FROM ghcr.io/berriai/litellm:main-stable
 
-# Copy config file
-COPY litellm_config.yaml /app/litellm_config.yaml
+WORKDIR /app
 
-# Set environment variables from Railway
-ENV PORT=4000
+# Respect PORT environment variable (Render requirement)
+ENV PORT=10000
 
-# Start LiteLLM with both models explicitly
-CMD ["litellm", "--config", "/app/litellm_config.yaml", "--port", "4000"]
+# Start litellm with both models
+# CRITICAL: Must bind to 0.0.0.0 for Render (not localhost)
+CMD litellm \
+    --model gemini/gemini-2.0-flash-exp \
+    --model anthropic/claude-sonnet-4-20250514 \
+    --host 0.0.0.0 \
+    --port ${PORT}
