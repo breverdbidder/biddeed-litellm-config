@@ -1,0 +1,40 @@
+# BidDeed.AI LiteLLM Configuration
+# 2-Tier Model Routing (Gemini FREE + Claude PREMIUM)
+
+model_list:
+  # FREE TIER - Gemini 2.5 Flash (60-70% of calls)
+  - model_name: gemini-2.5-flash
+    litellm_params:
+      model: gemini/gemini-2.0-flash-exp
+      api_key: os.environ/GEMINI_API_KEY
+    model_info:
+      tier: "FREE"
+      cost_per_token: 0
+      max_tokens: 1000000
+
+  # PREMIUM TIER - Claude Sonnet 4.5 (30-40% of calls)
+  - model_name: claude-sonnet-4.5
+    litellm_params:
+      model: anthropic/claude-sonnet-4-20250514
+      api_key: os.environ/ANTHROPIC_API_KEY
+    model_info:
+      tier: "PREMIUM"
+      cost_per_1k_input: 0.003
+      cost_per_1k_output: 0.015
+      max_tokens: 200000
+
+# Router configuration
+router_settings:
+  routing_strategy: usage-based-routing
+  allowed_fails: 3
+  cooldown_time: 60
+
+# Logging to Supabase
+litellm_settings:
+  success_callback: ["supabase"]
+  failure_callback: ["supabase"]
+  
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+  database_url: os.environ/SUPABASE_URL
+  database_key: os.environ/SUPABASE_SERVICE_ROLE_KEY
