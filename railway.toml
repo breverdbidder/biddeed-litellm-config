@@ -1,0 +1,6 @@
+[build]
+
+[deploy]
+startCommand = "litellm --model gemini/gemini-2.0-flash-exp --model anthropic/claude-sonnet-4-20250514 --port 4000"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
