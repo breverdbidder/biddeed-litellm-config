@@ -1,8 +1,8 @@
 services:
   - type: web
-    name: biddeed-litellm-proxy
+    name: litellm-proxy
     runtime: docker
-    dockerCommand: litellm --model gemini/gemini-2.0-flash-exp --model anthropic/claude-sonnet-4-20250514 --port 10000
+    dockerfilePath: ./Dockerfile
     plan: starter
     region: oregon
     envVars:
@@ -14,5 +14,4 @@ services:
         sync: false
       - key: LITELLM_MASTER_KEY
         sync: false
-    healthCheckPath: /health
-    autoDeploy: true
+    startCommand: "litellm --model gemini/gemini-2.0-flash --model anthropic/claude-sonnet-4-5-20250514 --port 10000 --host 0.0.0.0"
